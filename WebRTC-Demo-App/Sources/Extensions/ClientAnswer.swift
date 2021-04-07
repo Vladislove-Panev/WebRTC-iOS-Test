@@ -45,7 +45,7 @@ struct ClientIce: Codable {
         clientIceJson["ice"] = iceJson
         
         var json = [String:Any]()
-        json["cmd"] = "client_answer"
+        json["cmd"] = "client_ice"
         json["args"] = clientIceJson
         
         do{

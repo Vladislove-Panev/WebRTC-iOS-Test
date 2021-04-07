@@ -45,7 +45,7 @@ final class WebRTCClient: NSObject {
     
     required init(iceServers: [String]) {
         let config = RTCConfiguration()
-        config.iceServers = [RTCIceServer(urlStrings: ["turn:18.159.218.251:3478"], username: "1617779598:3946535"  , credential: "PhYCVXpaufw22/IHvf/pC3X2CjE=")]
+        config.iceServers = [RTCIceServer(urlStrings: iceServers)]
         
         // Unified plan is more superior than planB
         config.sdpSemantics = .unifiedPlan

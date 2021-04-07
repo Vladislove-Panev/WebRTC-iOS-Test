@@ -37,6 +37,8 @@ final class SignalingClient {
     func send(sdp rtcSdp: RTCSessionDescription) {
         let clientAnswer = ClientAnswer(sender_id: AppData.CrmId, sdp: rtcSdp.sdp)
         
+        print(rtcSdp.sdp)
+        
         clientAnswer.toJsonObj(){ (data) in
             self.webSocket.send(data: data)
         }
