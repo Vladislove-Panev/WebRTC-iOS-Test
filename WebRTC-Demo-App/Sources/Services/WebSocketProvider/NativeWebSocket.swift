@@ -21,9 +21,10 @@ class NativeWebSocket: NSObject, WebSocketProvider {
         super.init()
     }
 
-    func connect() {
-        var request = URLRequest(url: url)
-        request.addValue("Custom WS client", forHTTPHeaderField: "user-agent")
+    func connect(userId: String, token: String) {
+        var request = URLRequest(url: URL(string: "wss://chat.devshell.site/api/ws?userID=\(userId)")!)
+        request.setValue(".ASPXAUTHAPI=\(token)", forHTTPHeaderField: "Cookie")
+        request.timeoutInterval = 5
         
         let socket = urlSession.webSocketTask(with: request)
         socket.resume()
@@ -35,6 +36,10 @@ class NativeWebSocket: NSObject, WebSocketProvider {
         self.socket?.send(.data(data)) { _ in }
     }
     
+    func send(string: String) {
+        self.socket?.send(.string(string)) { _ in }
+    }
+    
     private func readMessage() {
         self.socket?.receive { [weak self] message in
             guard let self = self else { return }
@@ -42,6 +47,10 @@ class NativeWebSocket: NSObject, WebSocketProvider {
             switch message {
             case .success(.data(let data)):
                 self.delegate?.webSocket(self, didReceiveData: data)
+                self.readMessage()
+                
+            case .success(.string(let str)):
+                self.delegate?.webSocket(self, didReceiveString: str)
                 self.readMessage()
                 
             case .success:

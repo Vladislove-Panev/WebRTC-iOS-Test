@@ -26,6 +26,12 @@
 		795A4A2A221E0FB100F8BB03 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795A4A29221E0FB100F8BB03 /* Message.swift */; };
 		798FBA472200F681009F525E /* MainViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 798FBA462200F681009F525E /* MainViewController.xib */; };
 		798FBA492200F9A9009F525E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 798FBA482200F9A9009F525E /* LaunchScreen.storyboard */; };
+		8BBDE121261D9A7F00BC56DA /* CrmDataRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BBDE120261D9A7F00BC56DA /* CrmDataRequester.swift */; };
+		8BBDE125261D9C1100BC56DA /* CookieHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BBDE124261D9C1100BC56DA /* CookieHelper.swift */; };
+		8BBDE12A261D9C6400BC56DA /* AppData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BBDE129261D9C6400BC56DA /* AppData.swift */; };
+		8BBDE132261DB01700BC56DA /* ChatResponseMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BBDE131261DB01700BC56DA /* ChatResponseMessage.swift */; };
+		8BBDE135261DB15400BC56DA /* ChatResponseHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BBDE134261DB15400BC56DA /* ChatResponseHelper.swift */; };
+		8BBDE138261DB1BE00BC56DA /* ClientAnswer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BBDE137261DB1BE00BC56DA /* ClientAnswer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,7 +44,6 @@
 		79177CA720B2276400BCD399 /* VideoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoViewController.swift; sourceTree = "<group>"; };
 		79177CA920B2283F00BCD399 /* VideoViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = VideoViewController.xib; sourceTree = "<group>"; };
 		792198A122011A450051F03F /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
-		79262EE320B0D6F600D576C1 /* WebRTC-Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = "WebRTC-Demo.app"; path = "/Users/vladislavpanev/Desktop/WebRTC-iOS-Test/WebRTC-Demo-App/build/Debug-iphoneos/WebRTC-Demo.app"; sourceTree = "<absolute>"; };
 		79262EE620B0D6F600D576C1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		79262EE820B0D6F600D576C1 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		79262EED20B0D6F800D576C1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -48,6 +53,13 @@
 		795A4A29221E0FB100F8BB03 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		798FBA462200F681009F525E /* MainViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainViewController.xib; sourceTree = "<group>"; };
 		798FBA482200F9A9009F525E /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		8BBDE11B261D96B200BC56DA /* WebRTC-Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "WebRTC-Demo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		8BBDE120261D9A7F00BC56DA /* CrmDataRequester.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrmDataRequester.swift; sourceTree = "<group>"; };
+		8BBDE124261D9C1100BC56DA /* CookieHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookieHelper.swift; sourceTree = "<group>"; };
+		8BBDE129261D9C6400BC56DA /* AppData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppData.swift; sourceTree = "<group>"; };
+		8BBDE131261DB01700BC56DA /* ChatResponseMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatResponseMessage.swift; sourceTree = "<group>"; };
+		8BBDE134261DB15400BC56DA /* ChatResponseHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatResponseHelper.swift; sourceTree = "<group>"; };
+		8BBDE137261DB1BE00BC56DA /* ClientAnswer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClientAnswer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,6 +108,10 @@
 				79177CA520B1F76E00BCD399 /* RTCStates.swift */,
 				795A4A25221E081A00F8BB03 /* SessionDescription.swift */,
 				795A4A27221E0A1B00F8BB03 /* IceCandidate.swift */,
+				8BBDE124261D9C1100BC56DA /* CookieHelper.swift */,
+				8BBDE131261DB01700BC56DA /* ChatResponseMessage.swift */,
+				8BBDE134261DB15400BC56DA /* ChatResponseHelper.swift */,
+				8BBDE137261DB1BE00BC56DA /* ClientAnswer.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -124,12 +140,15 @@
 				798FBA422200F3B1009F525E /* Sources */,
 				79177C9B20B0E84600BCD399 /* Resources */,
 				79177C9A20B0E82B00BCD399 /* SupportingFiles */,
+				8BBDE11B261D96B200BC56DA /* WebRTC-Demo.app */,
 			);
 			sourceTree = "<group>";
 		};
 		798FBA422200F3B1009F525E /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				8BBDE128261D9C5400BC56DA /* Constants */,
+				8BBDE11F261D9A5D00BC56DA /* Requester */,
 				798FBA452200F519009F525E /* Services */,
 				798FBA442200F510009F525E /* Screens */,
 				79177CA420B1C39700BCD399 /* Extensions */,
@@ -159,6 +178,22 @@
 			path = Services;
 			sourceTree = "<group>";
 		};
+		8BBDE11F261D9A5D00BC56DA /* Requester */ = {
+			isa = PBXGroup;
+			children = (
+				8BBDE120261D9A7F00BC56DA /* CrmDataRequester.swift */,
+			);
+			path = Requester;
+			sourceTree = "<group>";
+		};
+		8BBDE128261D9C5400BC56DA /* Constants */ = {
+			isa = PBXGroup;
+			children = (
+				8BBDE129261D9C6400BC56DA /* AppData.swift */,
+			);
+			path = Constants;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -180,7 +215,7 @@
 				2FBDB29A25E851E3004F4BF4 /* WebRTC */,
 			);
 			productName = WebRTC;
-			productReference = 79262EE320B0D6F600D576C1 /* WebRTC-Demo.app */;
+			productReference = 8BBDE11B261D96B200BC56DA /* WebRTC-Demo.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -243,7 +278,11 @@
 				79262EE920B0D6F600D576C1 /* MainViewController.swift in Sources */,
 				792198A222011A450051F03F /* Config.swift in Sources */,
 				79177CA820B2276400BCD399 /* VideoViewController.swift in Sources */,
+				8BBDE132261DB01700BC56DA /* ChatResponseMessage.swift in Sources */,
+				8BBDE12A261D9C6400BC56DA /* AppData.swift in Sources */,
+				8BBDE121261D9A7F00BC56DA /* CrmDataRequester.swift in Sources */,
 				79262EE720B0D6F600D576C1 /* AppDelegate.swift in Sources */,
+				8BBDE138261DB1BE00BC56DA /* ClientAnswer.swift in Sources */,
 				795A4A26221E081A00F8BB03 /* SessionDescription.swift in Sources */,
 				79177CA620B1F76E00BCD399 /* RTCStates.swift in Sources */,
 				79177C9920B0DF2700BCD399 /* SignalingClient.swift in Sources */,
@@ -251,7 +290,9 @@
 				795A4A28221E0A1B00F8BB03 /* IceCandidate.swift in Sources */,
 				2F7EBC3622DCC6430015B46E /* WebSocketProvider.swift in Sources */,
 				79177C9720B0DE7A00BCD399 /* WebRTCClient.swift in Sources */,
+				8BBDE135261DB15400BC56DA /* ChatResponseHelper.swift in Sources */,
 				2F7EBC3822DCCB4E0015B46E /* StarscreamProvider.swift in Sources */,
+				8BBDE125261D9C1100BC56DA /* CookieHelper.swift in Sources */,
 				2F7EBC3A22DCCE240015B46E /* NativeWebSocket.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

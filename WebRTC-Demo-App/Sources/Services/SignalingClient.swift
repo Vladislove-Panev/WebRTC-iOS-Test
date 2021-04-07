@@ -21,6 +21,7 @@ final class SignalingClient {
     private let decoder = JSONDecoder()
     private let encoder = JSONEncoder()
     private let webSocket: WebSocketProvider
+    private var timer: Timer!
     weak var delegate: SignalClientDelegate?
     
     init(webSocket: WebSocketProvider) {
@@ -29,35 +30,57 @@ final class SignalingClient {
     
     func connect() {
         self.webSocket.delegate = self
-        self.webSocket.connect()
+        self.webSocket.connect(userId: AppData.CrmId, token: AppData.Token)
+        startKeepAlive()
     }
     
     func send(sdp rtcSdp: RTCSessionDescription) {
-        let message = Message.sdp(SessionDescription(from: rtcSdp))
-        do {
-            let dataMessage = try self.encoder.encode(message)
-            
-            self.webSocket.send(data: dataMessage)
-        }
-        catch {
-            debugPrint("Warning: Could not encode sdp: \(error)")
+        let clientAnswer = ClientAnswer(sender_id: AppData.CrmId, sdp: rtcSdp.sdp)
+        
+        clientAnswer.toJsonObj(){ (data) in
+            self.webSocket.send(data: data)
         }
     }
     
     func send(candidate rtcIceCandidate: RTCIceCandidate) {
-        let message = Message.candidate(IceCandidate(from: rtcIceCandidate))
-        do {
-            let dataMessage = try self.encoder.encode(message)
-            self.webSocket.send(data: dataMessage)
+        let clientIce = ClientIce(sender_id: AppData.CrmId, ice: Ice(candidate: rtcIceCandidate.sdp,sdpMid: rtcIceCandidate.sdpMid!, sdpMLineIndex: rtcIceCandidate.sdpMLineIndex))
+            
+        clientIce.toJsonObj(){ (data) in
+            self.webSocket.send(data: data)
         }
-        catch {
-            debugPrint("Warning: Could not encode candidate: \(error)")
+    }
+    
+    private func startKeepAlive(){
+        timer = Timer.scheduledTimer(withTimeInterval: 8.0, repeats: true) { timer in
+            self.webSocket.send(string: ".")
         }
     }
 }
 
 
 extension SignalingClient: WebSocketProviderDelegate {
+    func webSocket(_ webSocket: WebSocketProvider, didReceiveString str: String) {
+        do{
+            let data = str.data(using: .utf8)!
+            let chatResponseMessage = try JSONDecoder().decode(ChatResponseMessage.self, from: data)
+            
+            switch chatResponseMessage.cmd {
+                case "manager_offer":
+                    ChatResponseHelper.decodeChatResponse(messageArgs: data){ (managerOffer: ChatOfferResponseMessage) in
+                        self.delegate?.signalClient(self, didReceiveRemoteSdp: managerOffer.args.rtcSessionDescription)
+                    }
+                case "manager_ice":
+                    ChatResponseHelper.decodeChatResponse(messageArgs: data){ (managerIce: ChatIceResponseMessage) in
+                        self.delegate?.signalClient(self, didReceiveCandidate: managerIce.args.ice.rtcIceCandidate)
+                        }
+                default:
+                    print("Unhandled chat message")
+            }
+        }catch{
+            print("Some error with JSON encode/decode")
+        }
+    }
+    
     func webSocketDidConnect(_ webSocket: WebSocketProvider) {
         self.delegate?.signalClientDidConnect(self)
     }
@@ -68,7 +91,7 @@ extension SignalingClient: WebSocketProviderDelegate {
         // try to reconnect every two seconds
         DispatchQueue.global().asyncAfter(deadline: .now() + 2) {
             debugPrint("Trying to reconnect to signaling server...")
-            self.webSocket.connect()
+            self.webSocket.connect(userId: AppData.CrmId, token: AppData.Token)
         }
     }
     

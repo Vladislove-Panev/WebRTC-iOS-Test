@@ -14,6 +14,9 @@ class MainViewController: UIViewController {
 
     private let signalClient: SignalingClient
     private let webRTCClient: WebRTCClient
+    private let crmDataRequester: CrmDataRequester
+    private let cookieHelper = CookieHelper()
+    
     private lazy var videoViewController = VideoViewController(webRTCClient: self.webRTCClient)
     
     @IBOutlet private weak var speakerButton: UIButton?
@@ -89,6 +92,8 @@ class MainViewController: UIViewController {
     init(signalClient: SignalingClient, webRTCClient: WebRTCClient) {
         self.signalClient = signalClient
         self.webRTCClient = webRTCClient
+        self.crmDataRequester = CrmDataRequester()
+        
         super.init(nibName: String(describing: MainViewController.self), bundle: Bundle.main)
     }
     
@@ -110,7 +115,32 @@ class MainViewController: UIViewController {
         
         self.webRTCClient.delegate = self
         self.signalClient.delegate = self
-        self.signalClient.connect()
+        
+        crmDataRequester.executeURLRequest(url: URL(string: "https://test-api.maximarkets.net/Account/logon")!){ result in
+            if case .success (_, _) = result {
+                let cookies = self.cookieHelper.readCookie(forURL: URL(string: "https://test-api.maximarkets.net/Account/logon")!)
+                
+                for cookie in cookies {
+                        var cookieProperties = [HTTPCookiePropertyKey: Any]()
+                        cookieProperties[.name] = cookie.name
+                        cookieProperties[.value] = cookie.value
+                        cookieProperties[.domain] = cookie.domain
+                        cookieProperties[.path] = cookie.path
+                        cookieProperties[.version] = cookie.version
+                        cookieProperties[.expires] = Date().addingTimeInterval(31536000)
+                    
+                        let newCookie = HTTPCookie(properties: cookieProperties)
+                    
+                        HTTPCookieStorage.shared.setCookie(newCookie!)
+
+                    if(cookie.name == ".ASPXAUTHAPI"){
+                        AppData.Token = cookie.value
+                        print("--Token recieved--")
+                        self.signalClient.connect()
+                    }
+                }
+            }
+        }
     }
     
     @IBAction private func offerDidTap(_ sender: UIButton) {

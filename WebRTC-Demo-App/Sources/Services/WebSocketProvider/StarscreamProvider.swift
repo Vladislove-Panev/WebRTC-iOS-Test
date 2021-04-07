@@ -12,19 +12,30 @@ import Starscream
 class StarscreamWebSocket: WebSocketProvider {
 
     var delegate: WebSocketProviderDelegate?
-    private let socket: WebSocket
+    private let url: URL
+    private var socket: WebSocket
     
     init(url: URL) {
+        self.url = url
         self.socket = WebSocket(url: url)
-        self.socket.delegate = self
     }
     
-    func connect() {
+    func connect(userId: String, token: String) {
+        var request = URLRequest(url: URL(string: "wss://chat.devshell.site/api/ws?userID=\(userId)")!)
+        request.setValue(".ASPXAUTHAPI=\(token)", forHTTPHeaderField: "Cookie")
+        request.timeoutInterval = 5
+        
+        self.socket = WebSocket(request: request)
+        self.socket.delegate = self
         self.socket.connect()
     }
     
     func send(data: Data) {
         self.socket.write(data: data)
+    }
+    
+    func send(string: String) {
+        self.socket.write(string: string)
     }
 }
 
@@ -45,5 +56,7 @@ extension StarscreamWebSocket: Starscream.WebSocketDelegate {
         self.delegate?.webSocket(self, didReceiveData: data)
     }
     
-    
+    func websocketDidReceiveString(socket: WebSocketClient, string: String) {
+        self.delegate?.webSocket(self, didReceiveString: string)
+    }
 }
