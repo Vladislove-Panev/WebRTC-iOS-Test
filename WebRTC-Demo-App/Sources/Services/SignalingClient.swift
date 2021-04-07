@@ -12,7 +12,7 @@ import WebRTC
 protocol SignalClientDelegate: AnyObject {
     func signalClientDidConnect(_ signalClient: SignalingClient)
     func signalClientDidDisconnect(_ signalClient: SignalingClient)
-    func signalClient(_ signalClient: SignalingClient, didReceiveRemoteSdp sdp: RTCSessionDescription)
+    func signalClient(_ signalClient: SignalingClient, didReceiveRemoteSdp sdp: ManagerOffer)
     func signalClient(_ signalClient: SignalingClient, didReceiveCandidate candidate: RTCIceCandidate)
 }
 
@@ -69,7 +69,7 @@ extension SignalingClient: WebSocketProviderDelegate {
             switch chatResponseMessage.cmd {
                 case "manager_offer":
                     ChatResponseHelper.decodeChatResponse(messageArgs: data){ (managerOffer: ChatOfferResponseMessage) in
-                        self.delegate?.signalClient(self, didReceiveRemoteSdp: managerOffer.args.rtcSessionDescription)
+                        self.delegate?.signalClient(self, didReceiveRemoteSdp: managerOffer.args)
                     }
                 case "manager_ice":
                     ChatResponseHelper.decodeChatResponse(messageArgs: data){ (managerIce: ChatIceResponseMessage) in
@@ -98,21 +98,21 @@ extension SignalingClient: WebSocketProviderDelegate {
     }
     
     func webSocket(_ webSocket: WebSocketProvider, didReceiveData data: Data) {
-        let message: Message
-        do {
-            message = try self.decoder.decode(Message.self, from: data)
-        }
-        catch {
-            debugPrint("Warning: Could not decode incoming message: \(error)")
-            return
-        }
+        //let message: Message
+        //do {
+            //message = try self.decoder.decode(Message.self, from: data)
+        //}
+        //catch {
+            //debugPrint("Warning: Could not decode incoming message: \(error)")
+            //return
+        //}
         
-        switch message {
-        case .candidate(let iceCandidate):
-            self.delegate?.signalClient(self, didReceiveCandidate: iceCandidate.rtcIceCandidate)
-        case .sdp(let sessionDescription):
-            self.delegate?.signalClient(self, didReceiveRemoteSdp: sessionDescription.rtcSessionDescription)
-        }
+        //switch message {
+        //case .candidate(let iceCandidate):
+            //self.delegate?.signalClient(self, didReceiveCandidate: iceCandidate.rtcIceCandidate)
+        //case .sdp(let sessionDescription):
+            //self.delegate?.signalClient(self, didReceiveRemoteSdp: sessionDescription.rtcSessionDescription)
+        //}
 
     }
 }

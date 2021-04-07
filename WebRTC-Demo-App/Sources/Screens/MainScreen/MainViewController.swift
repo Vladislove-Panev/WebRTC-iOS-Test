@@ -13,7 +13,8 @@ import WebRTC
 class MainViewController: UIViewController {
 
     private let signalClient: SignalingClient
-    private let webRTCClient: WebRTCClient
+    private var webRTCClient: WebRTCClient!
+    private var iceCandidates: [RTCIceCandidate]!
     private let crmDataRequester: CrmDataRequester
     private let cookieHelper = CookieHelper()
     
@@ -89,9 +90,8 @@ class MainViewController: UIViewController {
         }
     }
     
-    init(signalClient: SignalingClient, webRTCClient: WebRTCClient) {
+    init(signalClient: SignalingClient) {
         self.signalClient = signalClient
-        self.webRTCClient = webRTCClient
         self.crmDataRequester = CrmDataRequester()
         
         super.init(nibName: String(describing: MainViewController.self), bundle: Bundle.main)
@@ -113,7 +113,6 @@ class MainViewController: UIViewController {
         self.speakerOn = false
         self.webRTCStatusLabel?.text = "New"
         
-        self.webRTCClient.delegate = self
         self.signalClient.delegate = self
         
         crmDataRequester.executeURLRequest(url: URL(string: "https://test-api.maximarkets.net/Account/logon")!){ result in
@@ -208,9 +207,11 @@ extension MainViewController: SignalClientDelegate {
         self.signalingConnected = false
     }
     
-    func signalClient(_ signalClient: SignalingClient, didReceiveRemoteSdp sdp: RTCSessionDescription) {
+    func signalClient(_ signalClient: SignalingClient, didReceiveRemoteSdp sdp: ManagerOffer) {
         print("Received remote sdp")
-        self.webRTCClient.set(remoteSdp: sdp) { (error) in
+        self.webRTCClient = WebRTCClient(iceServers: sdp.ice_server)
+        self.webRTCClient.delegate = self
+        self.webRTCClient.set(remoteSdp: sdp.rtcSessionDescription) { (error) in
             self.hasRemoteSdp = true
         }
     }
@@ -218,7 +219,23 @@ extension MainViewController: SignalClientDelegate {
     func signalClient(_ signalClient: SignalingClient, didReceiveCandidate candidate: RTCIceCandidate) {
         print("Received remote candidate")
         self.remoteCandidateCount += 1
-        self.webRTCClient.set(remoteCandidate: candidate)
+        if webRTCClient == nil{
+            if iceCandidates == nil{
+                iceCandidates = [candidate]
+            }
+            else{
+                iceCandidates += [candidate]
+            }
+        }
+        else{
+            if iceCandidates != nil{
+                for ice in iceCandidates {
+                    self.webRTCClient?.set(remoteCandidate: ice)
+                    iceCandidates.removeFirst()
+                }
+            }
+            self.webRTCClient?.set(remoteCandidate: candidate)
+        }
     }
 }
 
